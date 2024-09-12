@@ -4,63 +4,28 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { createGoal } from "../functions/create-goal";
-import z from "zod";
-import { getWeekPendingGoals } from "../functions/get-week-pending-goals";
-import { createGoalCompletion } from "../functions/create-goal-completion";
+import { createGoalRoute } from "./routes/create-goal";
+import { getPendindGoalsRoute } from "./routes/get-pending-goals";
+import { createCompletionRoute } from "./routes/create-completion";
+import { getWeekSummaryRoute } from "./routes/get-week-summary";
+import fastifyCors from "@fastify/cors";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
+// Register the CORS plugin to allow requests from any origin
+app.register(fastifyCors, {
+  origin: "*",
+});
+
+// Register the validator and serializer compilers, which are used to validate and serialize the request and response bodies
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-// returns the pending goals for the week
-app.get("/pending-goals", async () => {
-  const { pendingGoals } = await getWeekPendingGoals();
-
-  return {
-    pendingGoals,
-  };
-});
-
-// creates a new goal
-app.post(
-  "/goals",
-  {
-    schema: {
-      body: z.object({
-        title: z.string(),
-        desiredWeeklyFrequency: z.number().int().min(1).max(7),
-      }),
-    },
-  },
-  async (request) => {
-    const { title, desiredWeeklyFrequency } = request.body;
-
-    await createGoal({
-      title,
-      desiredWeeklyFrequency,
-    });
-  }
-);
-
-app.post(
-  "completions",
-  {
-    schema: {
-      body: z.object({
-        goalId: z.string(),
-      }),
-    },
-  },
-  async (request) => {
-    const { goalId } = request.body;
-
-    await createGoalCompletion({
-      goalId,
-    });
-  }
-);
+// Register the routes from the routes folder
+app.register(createGoalRoute);
+app.register(getPendindGoalsRoute);
+app.register(createCompletionRoute);
+app.register(getWeekSummaryRoute);
 
 app
   .listen({

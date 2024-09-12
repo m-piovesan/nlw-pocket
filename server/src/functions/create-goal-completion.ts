@@ -14,6 +14,7 @@ export async function createGoalCompletion({
   const firstDayOfTheWeek = dayjs().startOf("week").toDate();
   const lastDayOfTheWeek = dayjs().endOf("week").toDate();
 
+  // This query is responsible for getting the completion count for the goal for the current week
   const goalsCompletionCount = db.$with("goals_completion_count").as(
     db
       .select({
@@ -31,6 +32,7 @@ export async function createGoalCompletion({
       .groupBy(goalCompletions.goalId)
   );
 
+  // This query is responsible for getting the goal and the completion count for the goal for the current week
   const result = await db
     .with(goalsCompletionCount)
     .select({
@@ -51,6 +53,7 @@ export async function createGoalCompletion({
     throw new Error("Goal already completed for the week");
   }
 
+  // This query is responsible for inserting the goal completion into the database
   const insertResult = await db
     .insert(goalCompletions)
     .values({ goalId })
