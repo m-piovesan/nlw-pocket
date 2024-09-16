@@ -18,11 +18,15 @@ Instale as dependências do back-end:
 cd server/
 npm i
 ```
+Crie um arquivo chamado .env na pasta server e adicione uma URL pra um banco de dados do postgres (sugestão: utilizar o [Neon Console](https://console.neon.tech/app/welcome) para gerar uma URL):
+```bash
+# .env
+DATABASE_URL="postgresql://neondb_owner..."
+```
 Rode o servidor:
 ```bash
 npm run dev
 ```
-
 Você pode preencher o banco de dados com alguns valores fictícios (opcional) com:
 ```bash
 npm run seed

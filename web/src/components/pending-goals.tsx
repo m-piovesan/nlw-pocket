@@ -1,8 +1,9 @@
-import { Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { OutlineButton } from "./ui/outline-button";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPendingGoals } from "../http/getPendingGoals";
 import { createGoalCompletion } from "../http/create-goal-completion";
+import { DialogTrigger } from "./ui/dialog";
 
 export function PendingGoals() {
 	const queryClient = useQueryClient();
@@ -35,6 +36,13 @@ export function PendingGoals() {
 					</OutlineButton>
 				);
 			})}
+
+			<DialogTrigger asChild>
+				<OutlineButton isDelete>
+					<Pencil className="size-4 text-green-800" />
+					Editar metas
+				</OutlineButton>
+			</DialogTrigger>
 		</div>
 	);
 }

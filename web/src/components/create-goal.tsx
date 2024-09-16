@@ -46,6 +46,10 @@ export function CreateGoal() {
 		reset();
 	}
 
+	const handleCloseModal = () => {
+		reset(); // Limpa tanto os valores do formulário quanto os erros
+	};
+
 	return (
 		<DialogContent>
 			<div className="flex flex-col gap-6 h-full">
@@ -170,7 +174,11 @@ export function CreateGoal() {
 
 					<div className="flex itens-center gap-3">
 						<DialogClose asChild>
-							<Button variant="secondary" className="flex-1">
+							<Button
+								variant="secondary"
+								className="flex-1"
+								onClick={handleCloseModal} // Limpa tudo ao fechar
+							>
 								Fechar
 							</Button>
 						</DialogClose>
